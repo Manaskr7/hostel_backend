@@ -36,8 +36,9 @@ router.post('/mess', upload.single('document'), async (req, res) => {
       reason
     } = req.body;
 
-    if (!req.file) {
-      return res.status(400).json({ message: 'Document file is required' });
+    const documents = {};
+    if (req.file) {
+      documents.document = req.file.filename;
     }
 
     const newRequest = new MessDeductionRequest({
@@ -50,9 +51,7 @@ router.post('/mess', upload.single('document'), async (req, res) => {
       fromDate,
       toDate,
       reason,
-      documents: {
-        document: req.file.filename
-      }
+      documents
     });
 
     await newRequest.save();
